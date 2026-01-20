@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CESAG Venture | Club Finance & Bourse</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:#f4f6fb;
+    color:#2E7D32;
+}
+
+/* ===== TICKER ===== */
+#market-ticker-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    background:#2E7D32;
+    z-index:1000;
+    border-bottom:2px solid #FFD700;
+}
+#market-ticker {
+    display: flex;
+    white-space: nowrap;
+    font-weight: bold;
+    padding: 10px 0;
+    color: #FFD700;
+}
+.ticker-item {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 50px;
+    font-size: 0.95rem;
+}
+.ticker-value {
+    display:inline-block;
+    min-width:70px;
+    text-align:right;
+    transition: all 0.5s ease;
+    margin-left:5px;
+}
+.sparkline {
+    width:50px;
+    height:20px;
+    margin-left:8px;
+}
+
+/* ===== HEADER ===== */
+header{
+    margin-top:50px;
+    padding:20px 50px;
+    background:linear-gradient(135deg,#2E7D32,#1B5E20);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+header h2{ color:#FFD700; }
+nav a{
+    margin-left:20px;
+    font-weight:bold;
+    color:#2E7D32;
+    text-decoration:none;
+}
+nav a:hover{ color:#FFD700; }
+
+/* ===== HERO ===== */
+.hero{
+    text-align:center;
+    padding:80px 15px 50px;
+    background:linear-gradient(135deg,#2E7D32,#1B5E20);
+    color:white;
+}
+.hero h1{ font-family:'Montserrat'; font-size:2rem; margin-bottom:10px;}
+.hero p{font-size:1rem;}
+.hero button{
+    margin-top:20px;
+    padding:12px 30px;
+    background:#FFD700;
+    border:none;
+    border-radius:30px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* ===== SECTIONS ===== */
+section{ padding:40px 20px; }
+section h2{
+    text-align:center;
+    font-family:'Montserrat';
+    margin-bottom:30px;
+    font-size:1.8rem;
+}
+
+/* ===== GRID CARDS ===== */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+.card{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+.card h3 {
+    font-size:1.2rem;
+    margin-bottom:10px;
+}
+.card p {
+    font-size:0.95rem;
+    line-height:1.4;
+}
+.card button{
+    margin-top:10px;
+    padding:8px 18px;
+    background:linear-gradient(135deg,#2E7D32,#1B5E20);
+    color:#FFD700;
+    border:none;
+    border-radius:20px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.2s;
+}
+.card button:hover{
+    background:linear-gradient(135deg,#1B5E20,#2E7D32);
+}
+
+/* ===== MODAL ===== */
+.modal{
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.7);
+    z-index:2000;
+}
+.modal-content{
+    background:white;
+    margin:10% auto;
+    padding:30px;
+    width:90%;
+    max-width:600px;
+    border-radius:15px;
+}
+.close{
+    float:right;
+    font-size:1.5rem;
+    cursor:pointer;
+}
+
+/* ===== FOOTER ===== */
+footer{
+    background:#2E7D32;
+    color:white;
+    text-align:center;
+    padding:30px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+    section { padding:35px 15px; }
+    .grid { gap:18px; }
+    .card { padding:18px; }
+    .hero h1 { font-size:1.8rem; }
+}
+@media(max-width:768px){
+    section { padding:30px 15px; }
+    .grid { gap:15px; }
+    .card { padding:15px; }
+    .hero { padding:60px 10px 40px; }
+    .hero h1 { font-size:1.5rem; }
+    .hero p { font-size:0.95rem; }
+    .card h3 { font-size:1.1rem; }
+    .card p { font-size:0.9rem; }
+    .card button { padding:7px 15px; font-size:0.9rem; }
+}
+@media(max-width:480px){
+    section { padding:25px 10px; }
+    .grid { gap:12px; }
+    .card { padding:12px; }
+    .hero { padding:50px 10px 30px; }
+    .hero h1 { font-size:1.3rem; }
+    .hero p { font-size:0.85rem; }
+    .card h3 { font-size:1rem; }
+    .card p { font-size:0.85rem; }
+    .card button { padding:6px 12px; font-size:0.85rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== TICKER ===== -->
+<div id="market-ticker-container">
+    <div id="market-ticker"></div>
+</div>
+
+<header>
+    <h2>CESAG Venture</h2>
+    <nav>
+        <a href="#">Accueil</a>
+        <a href="#annonces">Annonces</a>
+        <a href="#formations">Formations</a>
+        <a href="adhesion.html">Adhésion</a>
+        <a href="admin.html">Administration</a>
+    </nav>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+    <h1>Club Finance, Bourse & Investissement du CESAG</h1>
+    <p>Comprendre – Investir – Performer</p>
+    <button onclick="window.location.href='adhesion.html'">Rejoindre le club</button>
+</section>
+
+<!-- ===== AVANTAGES ===== -->
+<section id="avantages">
+<h2>Avantages du Club</h2>
+<div class="grid">
+    <div class="card">
+        <h3>Networking & Mentorat</h3>
+        <p>Rencontrez des experts, échangez avec des investisseurs et bénéficiez de conseils personnalisés.</p>
+    </div>
+    <div class="card">
+        <h3>Formations Exclusives</h3>
+        <p>Accédez à des formations en finance, bourse et crypto adaptées à tous les niveaux.</p>
+    </div>
+    <div class="card">
+        <h3>Actualités & Analyses</h3>
+        <p>Recevez des analyses de marché et des actualités financières en temps réel pour rester informé.</p>
+    </div>
+    <div class="card">
+        <h3>Événements & Ateliers</h3>
+        <p>Participez à des ateliers pratiques et événements pour développer vos compétences et votre réseau.</p>
+    </div>
+</div>
+</section>
+
+<!-- ===== A PROPOS ===== -->
+<section id="apropos">
+<h2>À propos du Club</h2>
+<div class="grid">
+    <div class="card">
+        <p>CESAG Venture est le club officiel du CESAG dédié à la finance, la bourse et l’investissement. Notre mission est de former, informer et accompagner nos membres dans le monde de la finance et des marchés africains et internationaux.</p>
+    </div>
+</div>
+</section>
+
+<!-- ===== ANNONCES ===== -->
+<section id="annonces">
+<h2>Annonces & Actualités du Marché</h2>
+<div class="grid">
+    <div class="card">
+        <h3>Bitcoin et politique monétaire</h3>
+        <p>Le Bitcoin réagit fortement aux décisions des banques centrales...</p>
+        <button onclick="openModal('Bitcoin','Analyse approfondie sur l’impact des taux directeurs, adoption institutionnelle et volatilité.')">Lire plus</button>
+    </div>
+    <div class="card">
+        <h3>Marché de l’or en 2026</h3>
+        <p>L’or reste une valeur refuge face aux incertitudes économiques...</p>
+        <button onclick="openModal('Or','Analyse macroéconomique, inflation, géopolitique et perspectives long terme.')">Lire plus</button>
+    </div>
+    <div class="card">
+        <h3>Actions technologiques</h3>
+        <p>Les valeurs tech dominent toujours les marchés boursiers...</p>
+        <button onclick="openModal('Actions','Focus sur Apple, Microsoft, Nvidia et stratégies d’investissement.')">Lire plus</button>
+    </div>
+</div>
+</section>
+
+<!-- ===== FORMATIONS ===== -->
+<section id="formations">
+<h2>Nos Formations Indispensables</h2>
+<div class="grid">
+    <div class="card">
+        <h3>Finance & Budget</h3>
+        <p>Apprenez à gérer vos finances personnelles, établir un budget et comprendre les bases de la finance.</p>
+        <button onclick="window.location.href='formations.html'">S’inscrire</button>
+    </div>
+    <div class="card">
+        <h3>Bourse & BRVM</h3>
+        <p>Découvrez le fonctionnement de la bourse africaine et comment investir intelligemment.</p>
+        <button onclick="window.location.href='formations.html'">S’inscrire</button>
+    </div>
+    <div class="card">
+        <h3>Crypto & Trading</h3>
+        <p>Initiation aux cryptomonnaies, aux plateformes d’échange et aux stratégies de trading.</p>
+        <button onclick="window.location.href='formations.html'">S’inscrire</button>
+    </div>
+</div>
+</section>
+
+<footer>
+<p>©️ 2026 CESAG Venture – Club Finance & Bourse</p>
+</footer>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3 id="modal-title"></h3>
+        <p id="modal-text"></p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// ===== MODAL =====
+function openModal(title,text){
+    document.getElementById("modal-title").innerText=title;
+    document.getElementById("modal-text").innerText=text;
+    document.getElementById("modal").style.display="block";
+}
+function closeModal(){
+    document.getElementById("modal").style.display="none";
+}
+
+// ===== TICKER CRYPTO =====
+const allCoins = ["bitcoin","ethereum","solana","tether","binancecoin","cardano","polkadot","ripple","dogecoin","polygon","litecoin","chainlink"];
+let previousPrices = {};
+let sparklineData = {};
+allCoins.forEach(c =>{previousPrices[c]=null; sparklineData[c]=[];});
+
+let startIndex=0;
+
+async function fetchMarket(){
+    try{
+        const ticker=document.getElementById("market-ticker");
+        ticker.innerHTML='';
+        const coins = await fetch("https://api.coingecko.com/api/v3/simple/price?ids="+allCoins.join(",")+"&vs_currencies=usd");
+        const data = await coins.json();
+        const visibleCoins=[];
+        for(let i=0;i<7;i++) visibleCoins.push(allCoins[(startIndex+i)%allCoins.length]);
+        visibleCoins.forEach(id=>{
+            const value=data[id].usd;
+            const span=document.createElement("span");
+            span.className="ticker-item";
+            let arrow='';
+            if(previousPrices[id]!==null){
+                if(value>previousPrices[id]) arrow=' ↑';
+                else if(value<previousPrices[id]) arrow=' ↓';
+            }
+            let color="#FFD700";
+            if(previousPrices[id]!==null){
+                if(value>previousPrices[id]) color="#00FF00";
+                else if(value<previousPrices[id]) color="#FF4136";
+            }
+            sparklineData[id].push(value);
+            if(sparklineData[id].length>20) sparklineData[id].shift();
+            span.innerHTML=`${id.toUpperCase()}: <span class="ticker-value" style="color:${color}">${value.toLocaleString()} $${arrow}</span>
+                <canvas class="sparkline" id="spark-${id}" width="50" height="20"></canvas>`;
+            ticker.appendChild(span);
+            previousPrices[id]=value;
+            setTimeout(()=>{
+                const ctx=document.getElementById(`spark-${id}`).getContext('2d');
+                new Chart(ctx,{
+                    type:'line',
+                    data:{labels:sparklineData[id].map((_,k)=>k),datasets:[{data:sparklineData[id],borderColor:color,borderWidth:1,fill:false,pointRadius:0}]},
+                    options:{responsive:false,animation:{duration:200},plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}
+                });
+            },50);
+        });
+        startIndex=(startIndex+1)%allCoins.length;
+    }catch(e){console.error(e);}
+}
+let tickerPos=0;
+function scrollTicker(){
+    const ticker=document.getElementById("market-ticker");
+    tickerPos-=0.5;
+    if(tickerPos<=-ticker.scrollWidth/2) tickerPos=0;
+    ticker.style.transform=`translateX(${tickerPos}px)`;
+    requestAnimationFrame(scrollTicker);
+}
+fetchMarket();
+setInterval(fetchMarket,5000);
+scrollTicker();
+</script>
+
+</body>
+</html>
